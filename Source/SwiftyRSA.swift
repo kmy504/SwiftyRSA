@@ -10,7 +10,7 @@
 import Foundation
 import Security
 
-public typealias Padding = SecPadding
+public typealias Algorithm = SecKeyAlgorithm
 
 public enum SwiftyRSA {
     
@@ -144,8 +144,8 @@ public enum SwiftyRSA {
             let pubKey = SecKeyCopyPublicKey(privKey) else {
             throw SwiftyRSAError.keyGenerationFailed(error: error?.takeRetainedValue())
         }
-        let privateKey = try SwiftyRSA.PrivateKey(reference: privKey)
-        let publicKey = try SwiftyRSA.PublicKey(reference: pubKey)
+        let privateKey = try PrivateKey(reference: privKey)
+        let publicKey = try PublicKey(reference: pubKey)
         
         return (privateKey: privateKey, publicKey: publicKey)
     }

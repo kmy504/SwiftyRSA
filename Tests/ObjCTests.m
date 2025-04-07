@@ -28,17 +28,17 @@
     NSData* data = [TestUtils randomDataWithCount:128];
     NSBundle* bundle = [NSBundle bundleForClass:[TestUtils class]];
     
-    PublicKey* pub;
-    pub = [[PublicKey alloc] initWithData:data error:nil];
-    pub = [[PublicKey alloc] initWithPemEncoded:@"test" error:nil];
-    pub = [[PublicKey alloc] initWithBase64Encoded:@"test" error:nil];
-    pub = [[PublicKey alloc] initWithPemNamed:@"test" in: bundle error:nil];
-    pub = [[PublicKey alloc] initWithDerNamed:@"test" in: bundle error:nil];
+    ObjcPublicKey* pub;
+    pub = [[ObjcPublicKey alloc] initWithData:data error:nil];
+    pub = [[ObjcPublicKey alloc] initWithPemEncoded:@"test" error:nil];
+    pub = [[ObjcPublicKey alloc] initWithBase64Encoded:@"test" error:nil];
+    pub = [[ObjcPublicKey alloc] initWithPemNamed:@"test" in: bundle error:nil];
+    pub = [[ObjcPublicKey alloc] initWithDerNamed:@"test" in: bundle error:nil];
     
     [pub reference];
     [pub dataAndReturnError:nil];
     [pub originalData];
-    [PublicKey publicKeysWithPemEncoded:@"test"];
+    [ObjcPublicKey publicKeysWithPemEncoded:@"test"];
     
     PrivateKey* priv;
     priv = [[PrivateKey alloc] initWithData:data error:nil];
@@ -64,13 +64,13 @@
     encrypted = [[EncryptedMessage alloc] initWithData:data];
     
     {
-        PublicKey* publicKey = [TestUtils publicKeyWithName:@"swiftyrsa-public" error:nil];
+        ObjcPublicKey* publicKey = [TestUtils publicKeyWithName:@"swiftyrsa-public" error:nil];
         PrivateKey* privateKey = [TestUtils privateKeyWithName:@"swiftyrsa-private" error:nil];
         Signature* signature = [[Signature alloc] initWithData:data];
         ClearMessage* clearMessage = [[ClearMessage alloc] initWithData:data];
         [clearMessage data];
         [clearMessage base64String];
-        [clearMessage encryptedWith:publicKey padding:kSecPaddingNone error:nil];
+        [clearMessage encryptedWith:publicKey algorithm:kSecKeyAlgorithmRSAEncryptionPKCS1 error:nil];
         [clearMessage signedWith:privateKey digestType:DigestTypeSha1 error:nil];
         [clearMessage verifyWith:publicKey signature:signature digestType:DigestTypeSha1 error:nil];
     }
@@ -80,7 +80,7 @@
         EncryptedMessage* encryptedMessage = [[EncryptedMessage alloc] initWithData:data];
         [encryptedMessage data];
         [encryptedMessage base64String];
-        [encryptedMessage decryptedWith:privateKey padding:kSecPaddingNone error:nil];
+        [encryptedMessage decryptedWith:privateKey algorithm:kSecKeyAlgorithmRSAEncryptionPKCS1 error:nil];
     }
     
     {
